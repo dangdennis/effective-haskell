@@ -3,14 +3,13 @@ module Main where
 import System.Directory.Internal.Prelude (getArgs)
 import Text.Read (readMaybe)
 
-main =
-  getArgs
-    >>= ( \args ->
-            let op = parseOp (head args)
-                operands = drop 1 args
-                total = eval op operands
-             in print total
-        )
+main :: IO ()
+main = do
+  args <- getArgs
+  let op = parseOp (head args)
+      operands = drop 1 args
+      total = eval op operands
+  print total
 
 data Op = Add | Sub | Mult
 
@@ -22,6 +21,7 @@ eval op operands =
         Sub -> foldl (-) (head ints) (drop 1 ints)
         Mult -> product ints
 
+parseOp :: String -> Op
 parseOp op
   | op == "+" = Add
   | op == "-" = Sub
